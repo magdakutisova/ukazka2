@@ -1,6 +1,11 @@
 <?php
 namespace Book;
 
+use Book\Model\Book;
+use Book\Model\BookTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
 class Module
 {
     public function getConfig()
@@ -21,4 +26,23 @@ class Module
             ),
         );
     }
+    
+    public function getServiceConfig(){
+    	return array(
+    			'factories' => array(
+    					'Book\Model\BookTable' => function($sm){
+    						$tableGateway = $sm->get('BookTableGateway');
+    						$table = new BookTable($tableGateway);
+    						return $table;
+    					},
+    					'BookTableGateway' => function($sm){
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Book());
+    						return new TableGateway('book', $dbAdapter, null, $resultSetPrototype);
+    					}
+    					),
+    			);
+    }
+    
 }

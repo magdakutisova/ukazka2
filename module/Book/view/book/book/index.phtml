@@ -1,0 +1,24 @@
+<?php
+
+$title = 'Knihy';
+$this->headTitle($title);
+?>
+<p>
+	<a href="<?php echo $this->url('book', array('action' => 'new'));?>">Přidat novou knihu</a>
+</p>
+<h2>Knihy:</h2>
+
+<table class="table">
+	<?php foreach ($books as $book) : ?>
+	<tr>
+		<td><?php echo $this->escapeHtml($book->name)?></td>
+		<td><?php echo $this->escapeHtml($book->author)?></td>
+		<td><a href="<?php echo $this->url('book',
+				array('action' => 'detail', 'id' => $book->idBook));?>">Detail knihy</a></td>
+		<td><a href="<?php echo $this->url('book',
+				array('action' => 'edit', 'id' => $book->idBook));?>">Editovat knihu</a></td>
+		<td><a href="<?php echo $this->url('book',
+				array('action' => 'delete', 'id' => $book->idBook));?>">Smazat knihu</a></td>
+	</tr>
+	<?php endforeach; ?>
+</table>
