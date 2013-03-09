@@ -3,6 +3,8 @@ namespace Book\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Book\Model\Book;
+use Book\Form\BookForm;
 
 class BookController extends AbstractActionController{
 	
@@ -27,7 +29,23 @@ class BookController extends AbstractActionController{
 	}
 	
 	public function newAction(){
+		$form = new BookForm();
+		$form->get('submit')->setValue('Přidat');
 		
+		$request = $this->getRequest();
+		if ($request->isPost()){
+			$book = new Book();
+			$form->setInputFilter($book->getInputFilter());
+			$form->setData($request->getPost());
+			
+			if($form->isValid()){
+				$book->exchangeArray($form->getData());
+				$this->getBookTable()->save($book);
+				
+				return $this->redirect()->toRoute('book');
+			}
+		}
+		return array('form' => $form);
 	}
 	
 	public function editAction(){

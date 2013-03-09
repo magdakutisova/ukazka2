@@ -1,6 +1,11 @@
 <?php
 namespace Book\Model;
 
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\Inputfilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 class Book{
 	
 	public $idBook;
@@ -10,6 +15,7 @@ class Book{
 	public $price;
 	public $stock;
 	public $image;
+	protected $inputFilter;
 	
 	public function exchangeArray($data){
 		$this->idBook = (isset($data['idBook'])) ? $data['idBook'] : null;
@@ -19,6 +25,103 @@ class Book{
 		$this->price = (isset($data['price'])) ? $data['price'] : null;
 		$this->stock = (isset($data['stock'])) ? $data['stock'] : null;
 		$this->image = (isset($data['image'])) ? $data['image'] : null;
+	}
+	
+	public function setInputFilter(InputFilterInterface $inputFilter){
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter(){
+		if(!$this->inputFilter){
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'idBook',
+					'required' => true,
+					'filters' => array(
+							array('name' => 'Int'),
+							),
+					)));
+			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'name',
+					'required' => true,
+					'filters' => array(
+							array('name' => 'StringTrim'),
+							),
+					'validators' => array(
+							array(
+									'name' => 'StringLength',
+									'options' => array(
+											'encoding' => 'UTF-8',
+											'min' => 1,
+											'max' => 200,
+											),
+									),
+							),
+					)));
+			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'author',
+					'required' => true,
+					'filters' => array(
+							array('name' => 'StringTrim'),
+							),
+					'validators' => array(
+							array(
+									'name' => 'StringLength',
+									'options' => array(
+											'encoding' => 'UTF-8',
+											'min' => 1,
+											'max' => 100,
+											),
+									),
+							),
+					)));
+			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'price',
+					'required' => true,
+					'filters' => array(
+							array('name' => 'StringTrim'),
+							),
+					'validators' => array(
+							array(
+									'name' => 'Float',
+									'options' => array(
+											'locale' => 'cs',
+											),
+									),
+							),
+					)));
+			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'stock',
+					'required' => true,
+					'filters' => array(
+							array('name' => 'StringTrim'),
+							),
+					'validators' => array(
+							array(
+									'name' => 'Int',
+									'options' => array(
+											'locale' => 'cs',
+											),
+									),
+							array(
+									'name' => 'GreaterThan',
+									'options' => array(
+											'min' => -1,
+											),
+									),
+							),
+					)));
+			
+			$this->inputFilter = $inputFilter;
+		}
+		
+		return $this->inputFilter;
 	}
 	
 }
