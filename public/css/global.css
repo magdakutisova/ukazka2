@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+
+.bold		{font-weight: bold;}
+.float-left {float: left; width: 100px; margin-right: 10px; margin-bottom: 10-px;}
+.box		{text-align: justify;}
