@@ -1,1 +1,23 @@
 <?php
+$title = 'Smazat knihu';
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title);?></h2>
+
+<p>Opravdu chcete smazat
+	'<?php echo $this->escapeHtml($book->name); ?>' by
+	'<?php echo $this->escapeHtml($book->author); ?>'?
+</p>
+<?php
+$url = $this->url('book', array(
+	'action' => 'delete',
+	'id' => $this->id,
+));
+?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+	<input type="hidden" name="id" value="<?php echo (int) $book->idBook; ?>" />
+	<input type="submit" name="del" value="Ano" />
+	<input type="submit" name="del" value="Ne" />
+</div>
+</form>

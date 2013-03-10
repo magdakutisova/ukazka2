@@ -16,4 +16,9 @@ return array(
    		'username' => 'root',
    		'password' => '',
    		),
+	'phpSettings' => array(
+			'display_startup_errors' => true,
+			'display_errors' => true,
+			'date.timezone' => 'Europe/Prague',
+			),
 );

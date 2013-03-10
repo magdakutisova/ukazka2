@@ -49,11 +49,54 @@ class BookController extends AbstractActionController{
 	}
 	
 	public function editAction(){
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if(!$id){
+			return $this->redirect()->toRoute('book', array(
+					'action' => 'new',
+					));
+		}
+		$book = $this->getBookTable()->find($id);
 		
+		$form = new BookForm();
+		$form->bind($book);
+		$form->get('submit')->setAttribute('value', 'Upravit');
+		
+		$request = $this->getRequest();
+		if($request->isPost()){
+			$form->setInputFilter($book->getInputFilter());
+			$form->setData($request->getPost());
+			
+			if($form->isValid()){
+				$this->getBookTable()->save($form->getData());
+				
+				return $this->redirect()->toRoute('book');
+			}
+		}
+		
+		return array(
+				'id' => $id,
+				'form' => $form,
+				);
 	}
 	
 	public function deleteAction(){
-		
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if(!$id){
+			return $this->redirect()->toRoute('book');
+		}		
+		$request = $this->getRequest();
+		if($request->isPost()){
+			$del = $request->getPost('del', 'Ne');
+			if($del == 'Ano'){
+				$id = (int) $request->getPost('id');
+				$this->getBookTable()->delete($id);
+			}
+			return $this->redirect()->toRoute('book');
+		}
+		return array(
+				'id' => $id,
+				'book' => $this->getBookTable()->find($id),
+				);
 	}
 	
 }

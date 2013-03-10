@@ -18,11 +18,12 @@ class BookTable{
 	
 	public function find($id){
 		$id = (int) $id;
-		$rowset = $this->tableGateway->select(array('id' => $id));
+		$rowset = $this->tableGateway->select(array('idBook' => $id));
 		$row = $rowset->current();
 		if(!$row){
 			throw new \Exception("Kniha $id nebyla nalezena.");
 		}
+		return $row;
 	}
 	
 	public function save(Book $book){
@@ -39,7 +40,7 @@ class BookTable{
 			$this->tableGateway->insert($data);
 		}
 		else{
-			if($this->getAlbum($id)){
+			if($this->find($id)){
 				$this->tableGateway->update($data, array('idBook' => $id));
 			}
 			else{
