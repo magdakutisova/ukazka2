@@ -39,10 +39,16 @@ class BookTable{
 	 * Uloží knihu do databáze.
 	 */
 	public function save(Book $book){
-		$data = $book->getArrayCopy();
+		$data = array(
+				'name' => $book->name,
+				'author' => $book->author,
+				'description' => $book->description,
+				'price' => $book->price,
+				'stock' => $book->stock,
+				'image' => $book->image,
+				);
 		$id = (int)$book->idBook;
 		if(0 == $id){
-			unset($data['idBook']);
 			$this->tableGateway->insert($data);
 		}
 		else{
