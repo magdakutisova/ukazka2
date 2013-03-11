@@ -17,6 +17,9 @@ class Book{
 	public $image;
 	protected $inputFilter;
 	
+	/*****
+	 * Načte proměnné třídy z pole.
+	 */
 	public function exchangeArray($data){
 		$this->idBook = (isset($data['idBook'])) ? $data['idBook'] : null;
 		$this->name = (isset($data['name'])) ? $data['name'] : null;
@@ -27,6 +30,9 @@ class Book{
 		$this->image = (isset($data['image'])) ? $data['image'] : null;
 	}
 	
+	/*****
+	 * Vrátí proměnné třídy jako pole.
+	 */
 	public function getArrayCopy(){
 		return get_object_vars($this);
 	}
@@ -35,6 +41,9 @@ class Book{
 		throw new \Exception("Not used");
 	}
 	
+	/*****
+	 * Vrátí filtr vstupů pro entitu.
+	 */
 	public function getInputFilter(){
 		if(!$this->inputFilter){
 			$inputFilter = new InputFilter();

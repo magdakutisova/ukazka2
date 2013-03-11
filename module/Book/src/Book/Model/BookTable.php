@@ -7,15 +7,24 @@ class BookTable{
 	
 	protected $tableGateway;
 	
+	/*****
+	 * Při konstrukci objektu nastaví instanci brány databázové tabulky.
+	 */
 	public function __construct(TableGateway $tableGateway){
 		$this->tableGateway = $tableGateway;
 	}
 	
+	/****
+	 * Vrátí všechny knihy z databáze.
+	 */
 	public function fetchAll(){
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
 	
+	/*****
+	 * Nalezne knihu podle zadaného ID.
+	 */
 	public function find($id){
 		$id = (int) $id;
 		$rowset = $this->tableGateway->select(array('idBook' => $id));
@@ -26,17 +35,14 @@ class BookTable{
 		return $row;
 	}
 	
+	/*****
+	 * Uloží knihu do databáze.
+	 */
 	public function save(Book $book){
-		$data = array(
-				'name' => $book->name,
-				'author' => $book->author,
-				'description' => $book->description,
-				'price' => $book->price,
-				'stock' => $book->stock,
-				'image' => $book->image,
-				);
+		$data = $book->getArrayCopy();
 		$id = (int)$book->idBook;
-		if($id == 0){
+		if(0 == $id){
+			unset($data['idBook']);
 			$this->tableGateway->insert($data);
 		}
 		else{
@@ -49,7 +55,11 @@ class BookTable{
 		}
 	}
 	
+	/*****
+	 * Smaže knihu z databáze.
+	 */
 	public function delete($id){
+		$id = (int) $id;
 		$this->tableGateway->delete(array('idBook' => $id));
 	}
 	
