@@ -1,1 +1,24 @@
-<?php
+<?php $title = 'Detail knihy';
+$this->headTitle($title);?>
+<p><a href="<?php echo $this->url('book');?>">Zpět na seznam knih</a></p>
+
+<h2><?php echo $this->escapeHtml($book->name)?></h2>
+<h3><?php echo $this->escapeHtml($book->author)?></h3>
+<div class="box">
+	<?php if($book->image){?>
+		<img src="<?php echo $this->basePath() . '/images/' . $this->escapeHtml($book->image) ?>" class="float-left"
+		alt="<?php echo $book->name?>"/>
+	<?php }
+	if ($book->description) {?>
+		<p><?php echo $this->escapeHtml($book->description)?></p>
+	<?php }?>
+	<p><span class="bold">Cena: </span><?php echo $this->escapeHtml($book->price)?> Kč</p>
+	<p><span class="bold">Na skladě: </span>
+		<?php if($book->stock > 0){
+			echo $this->escapeHtml($book->stock) . ' ks';
+		}
+		else{
+			echo 'není';
+		}?>
+	</p>
+</div>

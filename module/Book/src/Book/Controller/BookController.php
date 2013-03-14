@@ -25,7 +25,12 @@ class BookController extends AbstractActionController{
 	}
 	
 	public function detailAction(){
-		
+		$id = (int) $this->params()->fromRoute('id', 0);
+		if(!$id){
+			return $this->redirect()->toRoute('book');
+		}
+		$book = $this->getBookTable()->find($id);
+		return array('book' => $book);
 	}
 	
 	public function newAction(){
