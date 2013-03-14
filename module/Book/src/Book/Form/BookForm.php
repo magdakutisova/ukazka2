@@ -8,6 +8,7 @@ class BookForm extends Form{
 	public function __construct($name = null){
 		parent::__construct('book');
 		$this->setAttribute('method', 'post');
+		$this->setAttribute('enctype', 'multipart/form-data');
 		$this->add(array(
 				'name' => 'idBook',
 				'attributes' => array(
@@ -57,6 +58,15 @@ class BookForm extends Form{
 						),
 				'options' => array(
 						'label' => 'Počet ks na skladě:'
+						),
+				));
+		$this->add(array(
+				'name' => 'image',
+				'attributes' => array(
+						'type' => 'file',
+						),
+				'options' => array(
+						'label' => 'Obálka knihy:'
 						),
 				));
 		$this->add(array(

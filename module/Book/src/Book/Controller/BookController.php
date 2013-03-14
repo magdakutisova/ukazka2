@@ -3,6 +3,7 @@ namespace Book\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\InputFilter;
 use Book\Model\Book;
 use Book\Form\BookForm;
 
@@ -39,14 +40,41 @@ class BookController extends AbstractActionController{
 		
 		$request = $this->getRequest();
 		if ($request->isPost()){
+			$post = array_merge_recursive(
+					$request->getPost()->toArray(),
+					$request->getFiles()->toArray()
+					);
 			$book = new Book();
+			
 			$form->setInputFilter($book->getInputFilter());
-			$form->setData($request->getPost());
+			$form->setData($post);
+			$newFileName = '';
+						
+			if($post['image']['name'] != ''){
+				$originalFileName = pathinfo($post['image']['name']);
+				$author = $post['author'];
+				$name = $post['name'];
+				$new = preg_replace('/[^a-z0-9]+/i', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $author . ' ' . $name));
+				$newFileName = $new . '.' . $originalFileName['extension'];
+				
+				$inputFilter = $form->getInputFilter();
+				
+				$fileInput = new InputFilter\FileInput('image');
+				$fileInput->setRequired(false);
+				$fileInput->getFilterChain()->attachByName(
+						'filerenameupload',
+						array(
+								'target' => PUBLIC_PATH . '/images/' . $newFileName,
+								'overwrite' => true,
+								)
+						);
+				$inputFilter->add($fileInput);
+			}
 			
 			if($form->isValid()){
 				$book->exchangeArray($form->getData());
-				$this->getBookTable()->save($book);
-				
+				$book->image = $newFileName;
+				$this->getBookTable()->save($book);				
 				return $this->redirect()->toRoute('book');
 			}
 		}
@@ -61,6 +89,7 @@ class BookController extends AbstractActionController{
 					));
 		}
 		$book = $this->getBookTable()->find($id);
+		$image = $book->image;
 		
 		$form = new BookForm();
 		$form->bind($book);
@@ -68,11 +97,44 @@ class BookController extends AbstractActionController{
 		
 		$request = $this->getRequest();
 		if($request->isPost()){
+			$post = array_merge_recursive(
+					$request->getPost()->toArray(),
+					$request->getFiles()->toArray()
+			);
 			$form->setInputFilter($book->getInputFilter());
-			$form->setData($request->getPost());
+			$form->setData($post);
+			$newFileName = '';
+				
+			if($post['image']['name'] != ''){
+				$originalFileName = pathinfo($post['image']['name']);
+				$author = $post['author'];
+				$name = $post['name'];
+				$new = preg_replace('/[^a-z0-9]+/i', '-', iconv('UTF-8', 'ASCII//TRANSLIT', $author . ' ' . $name));
+				$newFileName = $new . '.' . $originalFileName['extension'];
+			
+				$inputFilter = $form->getInputFilter();
+			
+				$fileInput = new InputFilter\FileInput('image');
+				$fileInput->setRequired(false);
+				$fileInput->getFilterChain()->attachByName(
+						'filerenameupload',
+						array(
+								'target' => PUBLIC_PATH . '/images/' . $newFileName,
+								'overwrite' => true,
+						)
+				);
+				$inputFilter->add($fileInput);
+			}
 			
 			if($form->isValid()){
-				$this->getBookTable()->save($form->getData());
+				$data = $form->getData();
+				if($newFileName == ''){
+					$data->image = $image;
+				}
+				else{
+					$data->image = $newFileName;
+				}
+				$this->getBookTable()->save($data);
 				
 				return $this->redirect()->toRoute('book');
 			}

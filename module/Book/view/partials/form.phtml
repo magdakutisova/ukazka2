@@ -39,7 +39,7 @@ echo $this->form()->openTag($form); ?>
 		<tr>
 			<td id="price-label">
 			<?php $price = $form->get('price');
-			echo $formLabel->openTag() . $description->getOption('label') . $formLabel->closeTag();?>
+			echo $formLabel->openTag() . $price->getOption('label') . $formLabel->closeTag();?>
 			</td>
 			<td>
 			<?php echo $this->formInput($price);
@@ -56,6 +56,15 @@ echo $this->form()->openTag($form); ?>
 			echo $this->formElementErrors($stock);?>
 			</td>
 		</tr>
+		<tr>
+			<td id="image-label">
+			<?php $image = $form->get('image');
+			echo $formLabel->openTag() . $image->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formFile($image);
+			echo $this->formElementErrors($image);?>
+			</td>
 		<tr>
 			<td colspan="2">
 			<?php echo $this->formElement($form->get('submit'));?>
