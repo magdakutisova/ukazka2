@@ -1,0 +1,67 @@
+<?php
+$formLabel = $this->plugin('formLabel');
+$form->prepare();
+
+echo $this->form()->openTag($form); ?>
+<table>
+<?php echo $this->formElement($form->get('idBook'));?>
+	<tbody>
+		<tr>
+			<td id="name-label">
+			<?php $name = $form->get('name');
+			echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formInput($name);
+			echo $this->formElementErrors($name);?>
+			</td>
+		</tr>
+		<tr>
+			<td id="author-label">
+			<?php $author = $form->get('author');
+			echo $formLabel->openTag() . $author->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formInput($author);
+			echo $this->formElementErrors($author);?>
+			</td>
+		</tr>
+		<tr>
+			<td id="description-label">
+			<?php $description = $form->get('description');
+			echo $formLabel->openTag() . $description->getOption('label') . $formLabel->closeTag(); ?>
+			</td>
+			<td>
+			<?php echo $this->formTextarea($description);
+			echo $this->formElementErrors($description);?>
+			</td>
+		</tr>
+		<tr>
+			<td id="price-label">
+			<?php $price = $form->get('price');
+			echo $formLabel->openTag() . $description->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formInput($price);
+			echo $this->formElementErrors($price);?>
+			</td>
+		</tr>
+		<tr>
+			<td id="stock-label">
+			<?php $stock = $form->get('stock');
+			echo $formLabel->openTag() . $stock->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formInput($stock);
+			echo $this->formElementErrors($stock);?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<?php echo $this->formElement($form->get('submit'));?>
+			</td>
+		</tr>
+		<?php echo $this->formHidden($form->get('csrf'));?>
+	</tbody>
+</table>
+<?php echo $this->form()->closeTag();

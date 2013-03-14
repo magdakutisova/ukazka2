@@ -27,5 +27,8 @@ return array(
 				'template_path_stack' => array(
 						'book' => __DIR__ . '/../view',
 						),
+				'template_map' => array(
+						'partials/form' => __DIR__ . '/../view/partials/form.phtml',
+						),
 				),
 );

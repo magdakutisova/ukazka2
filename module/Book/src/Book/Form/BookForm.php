@@ -67,6 +67,12 @@ class BookForm extends Form{
 						'id' => 'submitbutton'
 						),
 				));
+		$this->add(array(
+				'name' => 'csrf',
+				'attributes' => array(
+						'type' => 'csrf',
+						),
+				));
 	}
 	
 }

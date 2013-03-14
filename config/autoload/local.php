@@ -11,14 +11,13 @@
  * credentials from accidentally being committed into version control.
  */
 
+ini_set('display_errors', true);
+ini_set('display_startup_errors', true);
+ini_set('date.timezone', 'Europe/Prague');
+
 return array(
    'db' => array(
    		'username' => 'root',
    		'password' => '',
    		),
-	'phpSettings' => array(
-			'display_startup_errors' => true,
-			'display_errors' => true,
-			'date.timezone' => 'Europe/Prague',
-			),
 );

@@ -13,8 +13,6 @@ $form->setAttribute('action', $this->url(
 		'id' => $this->id,
 	)
 ));
-$form->prepare();
-
-echo $this->form()->openTag($form);
-echo $this->formCollection($form);
-echo $this->form()->closeTag();
+echo $this->partial('partials/form', array(
+	'form' => $form,
+));
