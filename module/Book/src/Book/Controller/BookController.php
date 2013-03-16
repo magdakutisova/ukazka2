@@ -20,9 +20,10 @@ class BookController extends AbstractActionController{
 	}
 	
 	public function indexAction(){
-		return new ViewModel(array(
+		return array(
 				'books' => $this->getBookTable()->fetchAll(),
-				));
+				'flashMessages' => $this->flashMessenger()->getMessages(),
+				);
 	}
 	
 	public function detailAction(){
@@ -31,7 +32,10 @@ class BookController extends AbstractActionController{
 			return $this->redirect()->toRoute('book');
 		}
 		$book = $this->getBookTable()->find($id);
-		return array('book' => $book);
+		return array(
+				'book' => $book,
+				'flashMessages' => $this->flashMessenger()->getMessages(),
+				);
 	}
 	
 	public function newAction(){
@@ -78,7 +82,10 @@ class BookController extends AbstractActionController{
 				return $this->redirect()->toRoute('book');
 			}
 		}
-		return array('form' => $form);
+		return array(
+				'form' => $form,
+				'flashMessages' => $this->flashMessenger()->getMessages(),
+				);
 	}
 	
 	public function editAction(){
@@ -143,6 +150,7 @@ class BookController extends AbstractActionController{
 		return array(
 				'id' => $id,
 				'form' => $form,
+				'flashMessages' => $this->flashMessenger()->getMessages(),
 				);
 	}
 	
@@ -163,6 +171,7 @@ class BookController extends AbstractActionController{
 		return array(
 				'id' => $id,
 				'book' => $this->getBookTable()->find($id),
+				'flashMessages' => $this->flashMessenger()->getMessages(),
 				);
 	}
 	

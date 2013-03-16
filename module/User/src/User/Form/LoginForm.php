@@ -3,10 +3,10 @@ namespace User\Form;
 
 use Zend\Form\Form;
 
-class RegisterForm extends Form{
+class LoginForm extends Form{
 	
 	public function __construct($name = null){
-		parent::__construct('register');
+		parent::__construct('login');
 		$this->setAttribute('method', 'post');
 		$this->add(array(
 				'name' => 'email',
@@ -27,23 +27,14 @@ class RegisterForm extends Form{
 						),
 				));
 		$this->add(array(
-				'name' => 'confirmPassword',
-				'attributes' => array(
-						'type' => 'password',
-						),
-				'options' => array(
-						'label' => 'Heslo znovu',
-						),
-				));
-		$this->add(array(
-				'name' => 'create',
+				'name' => 'login',
 				'attributes' => array(
 						'type' => 'submit'
-						),
+				),
 				'options' => array(
-						'label' => 'Zaregistrovat',
-						),
-				));
+						'label' => 'Přihlásit',
+				),
+		));
 		$this->add(array(
 				'name' => 'csrf',
 				'attributes' => array(

@@ -1,1 +1,48 @@
-<b>blab</b><?php
+<?php
+$title = 'Přihlášení';
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title);?></h2>
+<?php 
+$form = $this->form;
+$form->setAttribute('action', $this->url(
+	'user',
+	array(
+		'action' => 'login',
+	)));
+
+$formLabel = $this->plugin('formLabel');
+$form->prepare();
+
+echo $this->form()->openTag($form);?>
+<table>
+	<tbody>
+		<tr>
+			<td id="email-label">
+			<?php $email = $form->get('email');
+			echo $formLabel->openTag() . $email->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formInput($email);
+			echo $this->formElementErrors($email);?>
+			</td>
+		</tr>
+		<tr>
+			<td id="password-label">
+			<?php $password = $form->get('password');
+			echo $formLabel->openTag() . $password->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formPassword($password);
+			echo $this->formElementErrors($password);?>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<?php echo $this->formElement($form->get('login'));?>
+			</td>
+		</tr>
+		<?php echo $this->formHidden($form->get('csrf'));?>
+	</tbody>
+</table>
+<?php echo $this->form()->closeTag();

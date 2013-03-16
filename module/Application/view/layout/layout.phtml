@@ -12,10 +12,21 @@
 </head>
 <body>
 <div class="container">
-	<div id="header" class="prepend-top"><div id="logged-in-as" class="push-20 last span-4"><?php //echo $this->loggedInAs(); ?></div>
+	<div id="header" class="prepend-top"><div id="logged-in-as" class="push-20 last span-4">
+	<?php echo $this->partial('partials/loggedinas.phtml'); ?></div>
 		<h1 class="span-19 pull-4 border"><?php echo "Internetové knihkupectví"; ?></h1></div>
 	<div id="main-content" class="span-24">
-		<?php //echo $this->messages(); ?>
+		<?php $children = $this->viewModel()
+								->getCurrent()
+								->getChildren();
+		$actionView = $children[0];
+		if(isset($actionView->flashMessages) && count($actionView->flashMessages)) : ?>
+		<div class="messages">
+			<?php foreach($actionView->flashMessages as $message) :?>
+			<p><?php echo $message?></p>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
 		<?php echo $this->content; ?>
 	</div>
 </div>

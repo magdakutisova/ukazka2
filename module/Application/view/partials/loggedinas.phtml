@@ -1,0 +1,18 @@
+<?php
+$auth = new \Zend\Authentication\AuthenticationService();
+if($auth->hasIdentity()){
+	$username = $auth->getIdentity()->email;
+	$logoutUrl = $this->url('user', array('action' => 'logout'));  ?>
+	<p class="no-margin">
+		<span class="bold">Přihlášen: </span> <?php echo $username; ?>
+	</p>
+	<p class="no-margin">
+		<a href="<?php echo $logoutUrl;?>">Odhlásit se</a>
+	</p>
+<?php }
+else{
+	$loginUrl = $this->url('user', array('action' => 'login'));
+	$registerUrl = $this->url('user', array('action' => 'register')); ?>
+	<p class="no-margin"><a href="<?php echo $loginUrl?>">Přihlásit se</a></p>
+	<p class="no-margin"><a href="<?php echo $registerUrl?>">Registrovat se</a></p>
+<?php }

@@ -6,7 +6,7 @@ use Zend\InputFilter\Inputfilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-class Book{
+class Book implements InputFilterAwareInterface{
 	
 	public $idBook;
 	public $name;
