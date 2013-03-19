@@ -9,7 +9,8 @@ return array(
     'modules' => array(
         'Application',
         'Book',
-        'User'
+        'User',
+        'Acl'
         ),
     'module_listener_options' => array(
         'module_paths' => array(
