@@ -3,12 +3,11 @@
 $title = 'Knihy';
 $this->headTitle($title);
 ?>
+<?php if($acl->isAllowed($role, 'book', 'book:new')){?>
 <p>
 	<a href="<?php echo $this->url('book', array('action' => 'new'));?>">Přidat novou knihu</a>
 </p>
-<p>
-	<a href="<?php echo $this->url('user', array('action' => 'register'));?>">Registrovat uživatele</a>
-</p>
+<?php } ?>
 <h2>Knihy:</h2>
 
 <table class="table">
@@ -18,10 +17,14 @@ $this->headTitle($title);
 		<td><?php echo $this->escapeHtml($book->author)?></td>
 		<td><a href="<?php echo $this->url('book',
 				array('action' => 'detail', 'id' => $book->idBook));?>">Detail knihy</a></td>
+		<?php if($acl->isAllowed($role, 'book', 'book:edit')){?>
 		<td><a href="<?php echo $this->url('book',
 				array('action' => 'edit', 'id' => $book->idBook));?>">Editovat knihu</a></td>
+		<?php }
+		if($acl->isAllowed($role, 'book', 'book:delete')){?>
 		<td><a href="<?php echo $this->url('book',
 				array('action' => 'delete', 'id' => $book->idBook));?>">Smazat knihu</a></td>
+		<?php }?>
 	</tr>
 	<?php endforeach; ?>
 </table>

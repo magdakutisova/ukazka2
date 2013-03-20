@@ -6,6 +6,9 @@ use Zend\View\Model\ViewModel;
 use Zend\InputFilter;
 use Book\Model\Book;
 use Book\Form\BookForm;
+use Acl\Controller\Plugin\AclPlugin;
+use Zend\Authentication\AuthenticationService;
+use Acl\Library\AclDefinition as MyAcl;
 
 class BookController extends AbstractActionController{
 	
@@ -20,9 +23,19 @@ class BookController extends AbstractActionController{
 	}
 	
 	public function indexAction(){
+		$auth = new AuthenticationService();
+		$role = '';
+		if($auth->hasIdentity()){
+			$role = $auth->getIdentity()->role;
+		}
+		else{
+			$role = 3;
+		}
 		return array(
 				'books' => $this->getBookTable()->fetchAll(),
 				'flashMessages' => $this->flashMessenger()->getMessages(),
+				'acl' => new MyAcl(),
+				'role' => $role,
 				);
 	}
 	
