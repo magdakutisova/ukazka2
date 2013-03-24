@@ -91,7 +91,8 @@ class BookController extends AbstractActionController{
 			if($form->isValid()){
 				$book->exchangeArray($form->getData());
 				$book->image = $newFileName;
-				$this->getBookTable()->save($book);				
+				$this->getBookTable()->save($book);
+				$this->flashMessenger()->addMessage('Kniha přidána');	
 				return $this->redirect()->toRoute('book');
 			}
 		}
@@ -155,6 +156,7 @@ class BookController extends AbstractActionController{
 					$data->image = $newFileName;
 				}
 				$this->getBookTable()->save($data);
+				$this->flashMessenger()->addMessage('Kniha upravena');
 				
 				return $this->redirect()->toRoute('book');
 			}
@@ -179,6 +181,7 @@ class BookController extends AbstractActionController{
 				$id = (int) $request->getPost('id');
 				$this->getBookTable()->delete($id);
 			}
+			$this->flashMessenger()->addMessage('Kniha smazána');	
 			return $this->redirect()->toRoute('book');
 		}
 		return array(
