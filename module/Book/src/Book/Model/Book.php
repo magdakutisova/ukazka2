@@ -2,9 +2,10 @@
 namespace Book\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\Inputfilter;
+use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\FileInput;
 
 class Book implements InputFilterAwareInterface{
 	
@@ -38,7 +39,7 @@ class Book implements InputFilterAwareInterface{
 	}
 	
 	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
+		throw new \Exception("Neimplementováno");
 	}
 	
 	/*****
@@ -131,6 +132,22 @@ class Book implements InputFilterAwareInterface{
 							),
 					)));
 			
+			$inputFilter->add($factory->createInput(array(
+					'name' => 'image',
+					'type' => 'Zend\InputFilter\FileInput',
+					'validators' => array(
+							array(
+									'name' => 'Zend\Validator\File\IsImage',
+									),
+							array(
+									'name' => 'Zend\Validator\File\Count',
+									'options' => array(
+											'max' => 1,
+											),
+									),
+							),							
+					)));
+
 			$this->inputFilter = $inputFilter;
 		}
 		

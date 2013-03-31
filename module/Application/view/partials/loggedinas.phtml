@@ -4,7 +4,7 @@ if($auth->hasIdentity()){
 	$username = $auth->getIdentity()->email;
 	$logoutUrl = $this->url('user', array('action' => 'logout'));  ?>
 	<p class="no-margin">
-		<span class="bold">Přihlášen: </span> <?php echo $username; ?>
+		<span class="bold">Přihlášen: </span> <?php echo $this->escapeHtml($username); ?>
 	</p>
 	<p class="no-margin">
 		<a href="<?php echo $logoutUrl;?>">Odhlásit se</a>
