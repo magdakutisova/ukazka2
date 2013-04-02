@@ -135,6 +135,7 @@ class Book implements InputFilterAwareInterface{
 			$inputFilter->add($factory->createInput(array(
 					'name' => 'image',
 					'type' => 'Zend\InputFilter\FileInput',
+					'required' => false,
 					'validators' => array(
 							array(
 									'name' => 'Zend\Validator\File\IsImage',
