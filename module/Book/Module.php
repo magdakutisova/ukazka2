@@ -3,7 +3,7 @@ namespace Book;
 
 use Book\Model\Book;
 use Book\Model\BookTable;
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
 class Module
@@ -33,12 +33,14 @@ class Module
     					'Book\Model\BookTable' => function($sm){
     						$tableGateway = $sm->get('BookTableGateway');
     						$table = new BookTable($tableGateway);
+    						$cacheAdapter = $sm->get('Zend\Cache\Storage\Filesystem');
+    						$table->setCache($cacheAdapter);
     						return $table;
     					},
     					'BookTableGateway' => function($sm){
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-    						$resultSetPrototype = new ResultSet();
-    						$resultSetPrototype->setArrayObjectPrototype(new Book());
+    						$resultSetPrototype = new HydratingResultSet();
+    						$resultSetPrototype->setObjectPrototype(new Book());
     						return new TableGateway('book', $dbAdapter, null, $resultSetPrototype);
     					}
     					),

@@ -31,8 +31,9 @@ class BookController extends AbstractActionController{
 		else{
 			$role = 3;
 		}
+		$books = $this->getBookTable()->fetchAll();
 		return array(
-				'books' => $this->getBookTable()->fetchAll(),
+				'books' => $books,
 				'flashMessages' => $this->flashMessenger()->getMessages(),
 				'acl' => new MyAcl(),
 				'role' => $role,

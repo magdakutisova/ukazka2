@@ -2,10 +2,13 @@
 namespace Book\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Cache\Storage\StorageInterface;
+use Zend\Stdlib\Hydrator;
 
 class BookTable{
 	
 	protected $tableGateway;
+	protected $cache;
 	
 	/*****
 	 * Při konstrukci objektu nastaví instanci brány databázové tabulky.
@@ -14,12 +17,28 @@ class BookTable{
 		$this->tableGateway = $tableGateway;
 	}
 	
+	/******
+	 * Nastaví cache.
+	 */
+	public function setCache(StorageInterface $cache){
+		$this->cache = $cache;
+	}
+	
 	/****
 	 * Vrátí všechny knihy z databáze.
 	 */
 	public function fetchAll(){
-		$resultSet = $this->tableGateway->select();
-		return $resultSet;
+		if(($resultSet = $this->cache->getItem('books')) == FALSE){
+			$resultSet = $this->tableGateway->select();
+			$resultSet = $resultSet->toArray();
+			$this->cache->setItem('books', $resultSet);			
+		}
+		$books = array();
+		$hydrator = new Hydrator\ArraySerializable();
+		foreach($resultSet as $result){
+			$books[] = $hydrator->hydrate($result, new Book());
+		}
+		return $books;
 	}
 	
 	/*****
@@ -27,12 +46,15 @@ class BookTable{
 	 */
 	public function find($id){
 		$id = (int) $id;
-		$rowset = $this->tableGateway->select(array('idBook' => $id));
-		$row = $rowset->current();
-		if(!$row){
-			throw new \Exception("Kniha $id nebyla nalezena.");
+		if(($result = $this->cache->getItem('book' . $id)) == FALSE){
+			$rowset = $this->tableGateway->select(array('idBook' => $id));
+			$result = $rowset->current();
+			if(!$result){
+				throw new \Exception("Kniha $id nebyla nalezena.");
+			}
+			$this->cache->setItem('book' . $id, $result);
 		}
-		return $row;
+		return $result;
 	}
 	
 	/*****
@@ -50,10 +72,13 @@ class BookTable{
 		$id = (int)$book->idBook;
 		if(0 == $id){
 			$this->tableGateway->insert($data);
+			$this->cache->removeItem('books');
 		}
 		else{
 			if($this->find($id)){
 				$this->tableGateway->update($data, array('idBook' => $id));
+				$this->cache->removeItem('books');
+				$this->cache->removeItem('book' . $id);
 			}
 			else{
 				throw new \Exception("Zadané id neexistuje.");
