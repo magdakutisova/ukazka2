@@ -2,6 +2,7 @@
 namespace User\Form;
 
 use Zend\Form\Form;
+use Zend\Captcha;
 
 class RegisterForm extends Form{
 	
@@ -33,6 +34,18 @@ class RegisterForm extends Form{
 						),
 				'options' => array(
 						'label' => 'Heslo znovu',
+						),
+				));
+		
+		$captcha = new Captcha\Figlet();
+		$captcha->setWordlen(6);
+		$captcha->setTimeout(300);
+		$this->add(array(
+				'name' => 'captcha',
+				'type' => 'Zend\Form\Element\Captcha',
+				'options' => array(
+						'label' => 'Prosím, opište text',
+						'captcha' => $captcha,
 						),
 				));
 		$this->add(array(

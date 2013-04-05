@@ -48,6 +48,16 @@ echo $this->form()->openTag($form);?>
 			</td>
 		</tr>
 		<tr>
+			<td id="captcha-label">
+			<?php $captcha = $form->get('captcha');
+			echo $formLabel->openTag() . $captcha->getOption('label') . $formLabel->closeTag();?>
+			</td>
+			<td>
+			<?php echo $this->formCaptcha($captcha);
+			echo $this->formElementErrors($captcha);?>
+			</td>
+		</tr>
+		<tr>
 			<td colspan="2">
 			<?php echo $this->formElement($form->get('create'));?>
 			</td>
