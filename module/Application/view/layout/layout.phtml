@@ -1,6 +1,8 @@
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php header('Content-Type: text/html; charset=UTF-8');?>
+<?php $this->headMeta()->appendHttpEquiv('Content-Type',
+										 'text/html;charset=UTF-8');
+echo $this->headMeta();?>
 <head>
 	<?php $this->headTitle(' - Ukázková aplikace - Zend Framework ');
 	echo $this->headTitle();?>

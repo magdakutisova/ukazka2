@@ -24,7 +24,9 @@ class AclPlugin extends AbstractPlugin{
 		
 		$actionName = strtolower($routeMatch->getParam('action', 'not-found'));
 		$controllerName = $routeMatch->getParam('controller', 'not-found');
-		$controllerName = strtolower(array_pop(explode('\\', $controllerName)));
+		$controllerNameParts = explode('\\', $controllerName);
+		$controllerName = array_pop($controllerNameParts);
+		$controllerName = strtolower($controllerName);
 		
 		if(!$acl->isAllowed($role, $moduleName, $controllerName.':'.$actionName)){
 			$router = $e->getRouter();
