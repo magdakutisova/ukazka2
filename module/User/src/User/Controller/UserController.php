@@ -11,10 +11,12 @@ use Zend\Authentication\AuthenticationService;
 use User\Model\RegisterFilter;
 use User\Form\LoginForm;
 use User\Model\LoginFilter;
+use Book\Model\BookTable;
 
 class UserController extends AbstractActionController{
 	
 	protected $userTable;
+	protected $bookTable;
 	
 	public function getUserTable(){
 		if(!$this->userTable){
@@ -22,6 +24,14 @@ class UserController extends AbstractActionController{
 			$this->userTable = $sm->get('User\Model\UserTable');
 		}
 		return $this->userTable;
+	}
+	
+	public function getBookTable(){
+		if(!$this->bookTable){
+			$sm = $this->getServiceLocator();
+			$this->bookTable = $sm->get('Book\Model\BookTable');
+		}
+		return $this->bookTable;
 	}
 	
 	public function registerAction(){
@@ -96,6 +106,18 @@ class UserController extends AbstractActionController{
 		$this->redirect()->toRoute('book');
 		return array(
 				'flashMessages' => $this->flashMessenger()->getMessages(),
+				);
+	}
+	
+	public function profileAction(){
+		$auth = new AuthenticationService();
+		if(!$auth->hasIdentity()){
+			$this->redirect()->toRoute('acl');
+		}
+		$bookTable = $this->getBookTable();
+		return array(
+				'email' => $auth->getIdentity()->email,
+				'favorites' => $bookTable->fetchFavorites($auth->getIdentity()->idUser),
 				);
 	}
 	

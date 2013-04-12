@@ -1,6 +1,8 @@
 <?php
 namespace Book\Controller;
 
+use Book\Model\BookTable;
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\InputFilter;
@@ -13,6 +15,7 @@ use Acl\Library\AclDefinition as MyAcl;
 class BookController extends AbstractActionController{
 	
 	protected $bookTable;
+	protected $favoriteTable;
 	
 	public function getBookTable(){
 		if(!$this->bookTable){
@@ -20,6 +23,14 @@ class BookController extends AbstractActionController{
 			$this->bookTable = $sm->get('Book\Model\BookTable');
 		}
 		return $this->bookTable;
+	}
+	
+	public function getFavoriteTable(){
+		if(!$this->favoriteTable){
+			$sm = $this->getServiceLocator();
+			$this->favoriteTable = $sm->get('Book\Model\FavoriteTable');
+		}
+		return $this->favoriteTable;
 	}
 	
 	public function indexAction(){
@@ -188,6 +199,30 @@ class BookController extends AbstractActionController{
 		return array(
 				'id' => $id,
 				'book' => $this->getBookTable()->find($id),
+				'flashMessages' => $this->flashMessenger()->getMessages(),
+				);
+	}
+	
+	public function favoriteAction(){
+		$idBook = (int) $this->params()->fromRoute('id', 0);
+		if(!$idBook){
+			return $this->redirect()->toRoute('book');
+		}
+		$auth = new AuthenticationService();
+		if(!$auth->hasIdentity()){
+			return $this->redirect()->toRoute('acl');
+		}
+		$idUser = $auth->getIdentity()->idUser;
+		$favoriteTable = $this->getFavoriteTable();
+		$result = $favoriteTable->favorite($idBook, $idUser);
+		if($result){
+			$this->flashMessenger()->addMessage('Kniha byla přidána do seznamu oblíbených');
+		}
+		else{
+			$this->flashMessenger()->addMessage('Tuto knihu již máte v seznamu oblíbených');
+		}
+		$this->redirect()->toRoute('book');
+		return array(
 				'flashMessages' => $this->flashMessenger()->getMessages(),
 				);
 	}

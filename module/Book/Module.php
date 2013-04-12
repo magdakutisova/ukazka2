@@ -1,6 +1,8 @@
 <?php
 namespace Book;
 
+use Book\Model\FavoriteTable;
+
 use Book\Model\Book;
 use Book\Model\BookTable;
 use Zend\Db\ResultSet\HydratingResultSet;
@@ -42,6 +44,15 @@ class Module
     						$resultSetPrototype = new HydratingResultSet();
     						$resultSetPrototype->setObjectPrototype(new Book());
     						return new TableGateway('book', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Book\Model\FavoriteTable' => function($sm){
+    						$tableGateway = $sm->get('FavoriteTableGateway');
+    						$table = new FavoriteTable($tableGateway);
+    						return $table;
+    					},
+    					'FavoriteTableGateway' => function($sm){
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						return new TableGateway('favorite', $dbAdapter);
     					}
     					),
     			);

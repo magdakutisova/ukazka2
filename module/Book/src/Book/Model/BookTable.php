@@ -4,6 +4,7 @@ namespace Book\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Stdlib\Hydrator;
+use Zend\Db\Sql\Sql;
 
 class BookTable{
 	
@@ -28,11 +29,27 @@ class BookTable{
 	 * Vrátí všechny knihy z databáze.
 	 */
 	public function fetchAll(){
-		//if(($resultSet = $this->cache->getItem('books')) == FALSE){
+		if(($resultSet = $this->cache->getItem('books')) == FALSE){
 			$resultSet = $this->tableGateway->select();
 			$resultSet = $resultSet->toArray();
-			//$this->cache->setItem('books', $resultSet);			
-		//}
+			$this->cache->setItem('books', $resultSet);			
+		}
+		$books = array();
+		$hydrator = new Hydrator\ArraySerializable();
+		foreach($resultSet as $result){
+			$books[] = $hydrator->hydrate($result, new Book());
+		}
+		return $books;
+	}
+	
+	public function fetchFavorites($idUser){
+		$sql = new Sql($this->tableGateway->getAdapter());
+		$select = $sql->select()
+			->from('book')
+			->join('favorite', 'book.idBook = favorite.idBook')
+			->where(array('idUser' => $idUser));
+		$statement = $sql->prepareStatementForSqlObject($select);
+		$resultSet = $statement->execute();
 		$books = array();
 		$hydrator = new Hydrator\ArraySerializable();
 		foreach($resultSet as $result){
@@ -46,14 +63,14 @@ class BookTable{
 	 */
 	public function find($id){
 		$id = (int) $id;
-		//if(($result = $this->cache->getItem('book' . $id)) == FALSE){
+		if(($result = $this->cache->getItem('book' . $id)) == FALSE){
 			$rowset = $this->tableGateway->select(array('idBook' => $id));
 			$result = $rowset->current();
 			if(!$result){
 				throw new \Exception("Kniha $id nebyla nalezena.");
 			}
 			$this->cache->setItem('book' . $id, $result);
-		//}
+		}
 		return $result;
 	}
 	
@@ -72,13 +89,13 @@ class BookTable{
 		$id = (int)$book->idBook;
 		if(0 == $id){
 			$this->tableGateway->insert($data);
-			//$this->cache->removeItem('books');
+			$this->cache->removeItem('books');
 		}
 		else{
 			if($this->find($id)){
 				$this->tableGateway->update($data, array('idBook' => $id));
-				//$this->cache->removeItem('books');
-				//$this->cache->removeItem('book' . $id);
+				$this->cache->removeItem('books');
+				$this->cache->removeItem('book' . $id);
 			}
 			else{
 				throw new \Exception("Zadané id neexistuje.");
@@ -92,8 +109,8 @@ class BookTable{
 	public function delete($id){
 		$id = (int) $id;
 		$this->tableGateway->delete(array('idBook' => $id));
-		//$this->cache->removeItem('books');
-		//$this->cache->removeItem('book' . $id);
+		$this->cache->removeItem('books');
+		$this->cache->removeItem('book' . $id);
 	}
 	
 }

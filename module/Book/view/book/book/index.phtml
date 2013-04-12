@@ -17,6 +17,10 @@ $this->headTitle($title);
 		<td><?php echo $this->escapeHtml($book->author)?></td>
 		<td><a href="<?php echo $this->url('book',
 				array('action' => 'detail', 'id' => $book->idBook));?>">Detail knihy</a></td>
+		<?php if($acl->isAllowed($role, 'book', 'book:favorite')){ ?>
+		<td><a href="<?php echo $this->url('book',
+				array('action' => 'favorite', 'id' => $book->idBook));?>">Přidat do oblíbených</a></td>
+		<?php }?>
 		<?php if($acl->isAllowed($role, 'book', 'book:edit')){?>
 		<td><a href="<?php echo $this->url('book',
 				array('action' => 'edit', 'id' => $book->idBook));?>">Editovat knihu</a></td>

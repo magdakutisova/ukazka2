@@ -25,8 +25,9 @@ class AclDefinition extends Acl{
 		$this->allow($guest, 'application');
 		$this->allow($guest, 'acl');
 		
-		$this->allow($user, 'user', 'user:logout');
+		$this->allow($user, 'user', array('user:logout', 'user:profile'));
 		$this->deny($user, 'user', array('user:login', 'user:register'));
+		$this->allow($user, 'book', 'book:favorite');
 		
 		$this->allow($admin, 'book', array('book:new', 'book:edit', 'book:delete'));
 	}
