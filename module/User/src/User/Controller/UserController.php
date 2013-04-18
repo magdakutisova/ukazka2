@@ -134,25 +134,19 @@ class UserController extends AbstractActionController{
 	}
 	
 	private function process($values){
-		$user = $this->getUserTable()->findByEmail($values['email']);
-		if(!$user){
-			$this->flashMessenger()->addMessage('Uživatel s emailem "' . $values['email'] . '" neexistuje.');
-			$this->redirect()->toRoute('user', array(
-					'action' => 'login',
-					));
-		}
-		else{
+		try{
+			$user = $this->getUserTable()->findByEmail($values['email']);
 			$password = $values['password'];
 			$salt = base64_decode($user->salt);
 			$password = $this->encrypt($password, $salt);
-			
+				
 			$adapter = $this->getAuthAdapter();
 			$adapter->setIdentity($values['email'])
-				->setCredential($password);
-			
+			->setCredential($password);
+				
 			$auth = new AuthenticationService();
 			$result = $auth->authenticate($adapter);
-			
+				
 			if($result->isValid()){
 				$loggedUser = $adapter->getResultRowObject();
 				$auth->getStorage()->write($loggedUser);
@@ -160,6 +154,13 @@ class UserController extends AbstractActionController{
 			}
 			return false;
 		}
+		catch(\Exception $e){
+			$this->flashMessenger()->addMessage('Uživatel s emailem "' . $values['email'] . '" neexistuje.');
+			$this->redirect()->toRoute('user', array(
+					'action' => 'login',
+			));
+		}	
+		
 	}
 	
 	private function getAuthAdapter(){
