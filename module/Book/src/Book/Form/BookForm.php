@@ -2,13 +2,22 @@
 namespace Book\Form;
 
 use Zend\Form\Form;
-
+/**
+ * Třída obsahující nastavení formuláře pro zadávání údajů o knihách.
+ * @author Magda Kutišová
+ *
+ */
 class BookForm extends Form{
 	
+	/**
+	 * Vytvoří formulář.
+	 * @param string $name jméno formuláře
+	 */
 	public function __construct($name = null){
 		parent::__construct('book');
 		$this->setAttribute('method', 'post');
 		$this->setAttribute('enctype', 'multipart/form-data');
+		
 		$this->add(array(
 				'name' => 'idBook',
 				'attributes' => array(

@@ -5,18 +5,34 @@ use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
+/**
+ * Konfigurační třída modulu ACL.
+ * @author Magda Kutišová
+ *
+ */
 class Module
 {
+	/**
+	 * Nastavuje cestu ke konfiguraci modulu.
+	 */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
     
+    /**
+     * Funkce probíhající při spuštění události bootstrap.
+     * @param MvcEvent $e MVC událost
+     */
     public function onBootstrap(MvcEvent $e){
     	$eventManager = $e->getApplication()->getEventManager();
     	$eventManager->attach('route', array($this, 'loadConfiguration'), 2);
     }
     
+    /**
+     * Načte konfiguraci pro ACL.
+     * @param MvcEvent $e MVC událost
+     */
     public function loadConfiguration(MvcEvent $e){
     	$application = $e->getApplication();
     	$sm = $application->getServiceManager();
@@ -36,6 +52,10 @@ class Module
     	}
     }
 
+    /**
+     * Konfiguruje autoloader.
+     * @return multitype:multitype:string  multitype:multitype:string pole autoloaderů
+     */
     public function getAutoloaderConfig()
     {
         return array(

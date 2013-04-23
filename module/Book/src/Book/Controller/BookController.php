@@ -2,7 +2,6 @@
 namespace Book\Controller;
 
 use Book\Model\BookTable;
-
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\InputFilter;
@@ -12,11 +11,20 @@ use Acl\Controller\Plugin\AclPlugin;
 use Zend\Authentication\AuthenticationService;
 use Acl\Library\AclDefinition as MyAcl;
 
+/**
+ * Controller pro manipulaci s knihami.
+ * @author Magda Kutišová
+ *
+ */
 class BookController extends AbstractActionController{
 	
 	protected $bookTable;
 	protected $favoriteTable;
 	
+	/**
+	 * Získá ze ServiceManageru instanci třídy pro manipulaci s databázovou tabulkou book.
+	 * @return Ambigous <object, multitype:> instance třídy pro manipulaci s databázovou tabulkou book
+	 */
 	public function getBookTable(){
 		if(!$this->bookTable){
 			$sm = $this->getServiceLocator();
@@ -25,6 +33,10 @@ class BookController extends AbstractActionController{
 		return $this->bookTable;
 	}
 	
+	/**
+	 * Získá ze ServiceManageru instanci třídy pro manipulaci s databázovou tabulkou favorite.
+	 * @return Ambigous <object, multitype:> instance třídy pro manipulaci s databázovou tabukou favorite
+	 */
 	public function getFavoriteTable(){
 		if(!$this->favoriteTable){
 			$sm = $this->getServiceLocator();
@@ -33,6 +45,10 @@ class BookController extends AbstractActionController{
 		return $this->favoriteTable;
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
 	public function indexAction(){
 		$auth = new AuthenticationService();
 		$role = '';
@@ -51,6 +67,10 @@ class BookController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro zobrazení detailu knihy.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:multitype: unknown přesměrování nebo proměnné pro view
+	 */
 	public function detailAction(){
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if(!$id){
@@ -63,6 +83,10 @@ class BookController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro přidání nové knihy do databáze.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\Book\Form\BookForm multitype: přesměrování nebo proměnné pro view
+	 */
 	public function newAction(){
 		$form = new BookForm();
 		$form->get('submit')->setValue('Přidat');
@@ -114,6 +138,10 @@ class BookController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro editaci knihy.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:number \Book\Form\BookForm multitype: přesměrování nebo proměnné pro view
+	 */
 	public function editAction(){
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if(!$id){
@@ -181,6 +209,10 @@ class BookController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro smazání knihy.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:number multitype: NULL přesměrování nebo proměnné pro view
+	 */
 	public function deleteAction(){
 		$id = (int) $this->params()->fromRoute('id', 0);
 		if(!$id){
@@ -203,6 +235,10 @@ class BookController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro přidání knihy do seznamu oblíbených.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:multitype: přesměrování nebo proměnné pro view
+	 */
 	public function favoriteAction(){
 		$idBook = (int) $this->params()->fromRoute('id', 0);
 		if(!$idBook){

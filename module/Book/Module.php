@@ -2,7 +2,6 @@
 namespace Book;
 
 use Book\Model\FavoriteTable;
-
 use Book\Model\Book;
 use Book\Model\BookTable;
 use Zend\Db\ResultSet\HydratingResultSet;

@@ -10,8 +10,17 @@ use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceManager;
 use Acl\Library\AclDefinition as MyAcl;
 
+/**
+ * Plugin provádějící autorizaci uživatele.
+ * @author Magda Kutišová
+ *
+ */
 class AclPlugin extends AbstractPlugin{
 	
+	/**
+	 * Provádí autorizaci.
+	 * @param unknown $e MVC událost
+	 */
 	public function doAuthorization($e){
 		$acl = new MyAcl();
 		

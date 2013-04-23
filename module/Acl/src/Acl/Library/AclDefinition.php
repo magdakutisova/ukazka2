@@ -4,8 +4,16 @@ namespace Acl\Library;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 
+/**
+ * Třída s definicí zdrojů, rolí a práv přístupu.
+ * @author Magda Kutišová
+ *
+ */
 class AclDefinition extends Acl{
 	
+	/**
+	 * Vytvoří instanci Acl a nastaví zdroje, role a práva.
+	 */
 	public function __construct(){
 		$this->addResource('book');
 		$this->addResource('user');
