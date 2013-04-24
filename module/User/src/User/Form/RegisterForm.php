@@ -4,8 +4,17 @@ namespace User\Form;
 use Zend\Form\Form;
 use Zend\Captcha;
 
+/**
+ * Třída obsahující nastavení formuláře pro registraci nového uživatele.
+ * @author Magda Kutišová
+ *
+ */
 class RegisterForm extends Form{
 	
+	/**
+	 * Vytvoří formulář.
+	 * @param string $name jméno formuláře
+	 */
 	public function __construct($name = null){
 		parent::__construct('register');
 		$this->setAttribute('method', 'post');

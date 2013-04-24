@@ -7,6 +7,11 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\FileInput;
 
+/**
+ * Třída mapující záznam tabulky book na objekt Book.
+ * @author Magda Kutišová
+ *
+ */
 class Book implements InputFilterAwareInterface{
 	
 	public $idBook;
@@ -18,8 +23,9 @@ class Book implements InputFilterAwareInterface{
 	public $image;
 	protected $inputFilter;
 	
-	/*****
+	/**
 	 * Načte proměnné třídy z pole.
+	 * @param unknown $data pole proměnných
 	 */
 	public function exchangeArray($data){
 		$this->idBook = (isset($data['idBook'])) ? $data['idBook'] : null;
@@ -31,19 +37,25 @@ class Book implements InputFilterAwareInterface{
 		$this->image = (isset($data['image'])) ? $data['image'] : null;
 	}
 	
-	/*****
-	 * Vrátí proměnné třídy jako pole.
+	/**
+	 * Vrátí proměnné třídy jako pole
+	 * @return multitype: pole proměnných
 	 */
 	public function getArrayCopy(){
 		return get_object_vars($this);
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::setInputFilter()
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter){
 		throw new \Exception("Neimplementováno");
 	}
 	
-	/*****
-	 * Vrátí filtr vstupů pro entitu.
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::getInputFilter()
 	 */
 	public function getInputFilter(){
 		if(!$this->inputFilter){

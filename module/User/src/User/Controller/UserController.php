@@ -13,11 +13,20 @@ use User\Form\LoginForm;
 use User\Model\LoginFilter;
 use Book\Model\BookTable;
 
+/**
+ * Controller pro manipulaci s uživateli.
+ * @author Magda Kutišová
+ *
+ */
 class UserController extends AbstractActionController{
 	
 	protected $userTable;
 	protected $bookTable;
 	
+	/**
+	 * Získá ze ServiceManageru instanci třídy pro manipulaci s databázovou tabulkou user.
+	 * @return Ambigous <object, multitype:> instance třídy pro manipulaci s databázovou tabulkou user
+	 */
 	public function getUserTable(){
 		if(!$this->userTable){
 			$sm = $this->getServiceLocator();
@@ -26,6 +35,10 @@ class UserController extends AbstractActionController{
 		return $this->userTable;
 	}
 	
+	/**
+	 * Získá ze ServiceManageru instanci třídy pro manipulaci s databázovou tabulkou book.
+	 * @return Ambigous <object, multitype:> instance třídy pro manipulaci s databázovou tabulkou book
+	 */
 	public function getBookTable(){
 		if(!$this->bookTable){
 			$sm = $this->getServiceLocator();
@@ -34,6 +47,10 @@ class UserController extends AbstractActionController{
 		return $this->bookTable;
 	}
 	
+	/**
+	 * Akce pro registraci nových uživatelů.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\User\Form\RegisterForm multitype: přesměrování nebo proměnné pro view
+	 */
 	public function registerAction(){
 		$form = new RegisterForm();
 		$form->get('create')->setValue('Zaregistrovat');
@@ -75,6 +92,10 @@ class UserController extends AbstractActionController{
 		);
 	}
 	
+	/**
+	 * Akce pro přihlášení uživatele.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\User\Form\LoginForm multitype: přesměrování nebo proměnné pro view
+	 */
 	public function loginAction(){
 		$form = new LoginForm();
 		$form->get('login')->setValue('Přihlásit');
@@ -100,6 +121,10 @@ class UserController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro odhlášení uživatele.
+	 * @return multitype:multitype: proměnné pro view
+	 */
 	public function logoutAction(){
 		$auth = new AuthenticationService();
 		$auth->clearIdentity();
@@ -109,6 +134,10 @@ class UserController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Akce pro zobrazení profilu uživatele.
+	 * @return multitype:NULL
+	 */
 	public function profileAction(){
 		$auth = new AuthenticationService();
 		if(!$auth->hasIdentity()){
@@ -121,18 +150,34 @@ class UserController extends AbstractActionController{
 				);
 	}
 	
+	/**
+	 * Funkce generující sůl pro zašifrování hesla.
+	 * @return string sůl
+	 */
 	private function generateSalt()
 	{
 		$salt = mcrypt_create_iv ( 64 );
 		return $salt;
 	}
 	
+	/**
+	 * Funkce, která zašifruje heslo pomocí soli.
+	 * @param unknown $password heslo k zašifrování
+	 * @param unknown $salt sůl pro zašifrování
+	 * @return string zašifrované heslo
+	 */
 	private function encrypt($password, $salt)
 	{
 		$password = hash ( 'sha256', $salt . $password );
 		return $password;
 	}
 	
+    /**
+     * Funkce, která zpracuje hodnoty zadané uživatelem a pokud je to možné, uživatele přihlásí.
+     * 
+     * @param unknown $values uživatelské jméno a heslo
+     * @return boolean true, pokud byl uživatel přihlášen, false, pokud nastala chyba
+     */
 	private function process($values){
 		try{
 			$user = $this->getUserTable()->findByEmail($values['email']);
@@ -163,6 +208,10 @@ class UserController extends AbstractActionController{
 		
 	}
 	
+	/**
+	 * Vrátí nakonfigurovaný adaptér k tabulce user určený k přihlašování.
+	 * @return \Zend\Authentication\Adapter\DbTable  adaptér
+	 */
 	private function getAuthAdapter(){
 		$dbAdapter = new DbAdapter(array(
 				'driver' => 'Pdo_Mysql',

@@ -3,8 +3,17 @@ namespace User\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Třída obsahující nastavení formuláře pro přihlášení.
+ * @author Magda Kutišová
+ *
+ */
 class LoginForm extends Form{
 	
+	/**
+	 * Vytvoří formulář.
+	 * @param string $name jméno formuláře
+	 */
 	public function __construct($name = null){
 		parent::__construct('login');
 		$this->setAttribute('method', 'post');
