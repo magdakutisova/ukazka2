@@ -1,20 +1,21 @@
 <?php
 namespace User\Model;
 
+/**
+ * Třída mapující záznam tabulky user na objekt User.
+ * @author Magda Kutišová
+ *
+ */
 class User{
 	public $idUser;
 	public $email;
 	public $password;
 	public $salt;
 	public $role;
-	public $firstName;
-	public $surname;
-	public $street;
-	public $number;
-	public $country;
 	
-	/*****
+	/**
 	 * Načte proměnné třídy z pole.
+	 * @param unknown $data pole proměnných
 	 */
 	public function exchangeArray($data){
 		$this->idUser = (isset($data['idUser'])) ? $data['idUser'] : null;
@@ -22,10 +23,5 @@ class User{
 		$this->password = (isset($data['password'])) ? $data['password'] : null;
 		$this->salt = (isset($data['salt'])) ? $data['salt'] : null;
 		$this->role = (isset($data['role'])) ? $data['role'] : null;
-		$this->firstName = (isset($data['firstName'])) ? $data['firstName'] : null;
-		$this->surname = (isset($data['surname'])) ? $data['surname'] : null;
-		$this->street = (isset($data['street'])) ? $data['street'] : null;
-		$this->number = (isset($data['number'])) ? $data['number'] : null;
-		$this->country = (isset($data['country'])) ? $data['country'] : null;
 	}
 }

@@ -6,13 +6,25 @@ use User\Model\UserTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
+/**
+ * Konfigurační třída modulu User.
+ * @author Magda Kutišová
+ *
+ */
 class Module
 {
-    public function getConfig()
+	/**
+	 * Nastavuje cestu ke konfiguraci modulu.
+	 */
+	public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * Konfiguruje autoloader.
+     * @return multitype:multitype:string  multitype:multitype:string pole autoloaderů
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -27,6 +39,10 @@ class Module
         );
     }
     
+    /**
+     * Konfiguruje service manager.
+     * @return multitype:multitype:NULL  |\Book\Model\BookTable|\Zend\Db\TableGateway\TableGateway|\Book\Model\FavoriteTable konfigurační pole pro ServiceManager
+     */
     public function getServiceConfig(){
     	return array(
     			'factories' => array(

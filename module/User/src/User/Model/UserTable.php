@@ -3,19 +3,28 @@ namespace User\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
+/**
+ * Třída pro manipulaci s databázovou tabulkou user.
+ * @author Magda Kutišová
+ *
+ */
 class UserTable{
 	
 	protected $tableGateway;
 	
-	/*****
-	 * Při konstrukci objektu nastaví instanci brány databázové tabulky.
-	*/
+	/**
+	 * Při konstrukci objektu nastaví bránu databázové tabulky.
+	 * @param TableGateway $tableGateway brána databázové tabulky
+	 */
 	public function __construct(TableGateway $tableGateway){
 		$this->tableGateway = $tableGateway;
 	}
 	
-	/****
+	/**
 	 * Nalezne uživatele podle zadaného ID.
+	 * @param unknown $id ID uživatele
+	 * @throws \Exception pokud uživatel není nalezen
+	 * @return mixed záznam z databáze
 	 */
 	public function find($id){
 		$id = (int) $id;
@@ -27,8 +36,11 @@ class UserTable{
 		return $row;
 	}
 	
-	/*****
+	/**
 	 * Nalezne uživatele podle emailové adresy.
+	 * @param unknown $email emailová adresa uživatele
+	 * @throws \Exception pokud uživatel není nalezen
+	 * @return mixed záznam z databáze
 	 */
 	public function findByEmail($email){
 		$rowset = $this->tableGateway->select(array('email' => $email));
@@ -39,8 +51,10 @@ class UserTable{
 		return $row;
 	}
 	
-	/*****
+	/**
 	 * Uloží uživatele do databáze.
+	 * @param User $user uživatel
+	 * @throws \Exception pokud ID pro update uživatele není platné
 	 */
 	public function save(User $user){
 		$data = array(
@@ -48,11 +62,6 @@ class UserTable{
 				'password' => $user->password,
 				'salt' => $user->salt,
 				'role' => $user->role,
-				'firstName' => $user->firstName,
-				'surname' => $user->surname,
-				'street' => $user->street,
-				'number' => $user->number,
-				'country' => $user->country,
 				);
 		$id = (int)$user->idUser;
 		if(0 == $id){

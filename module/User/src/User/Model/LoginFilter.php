@@ -6,13 +6,26 @@ use Zend\InputFilter\Inputfilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+/**
+ * Třída definující filtry pro přihlašovací formulář.
+ * @author Magda Kutišová
+ *
+ */
 class LoginFilter implements InputFilterAwareInterface{
 	protected $inputFilter;
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::setInputFilter()
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter){
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\InputFilter\InputFilterAwareInterface::getInputFilter()
+	 */
 	public function getInputFilter(){
 		if(!$this->inputFilter){
 			$inputFilter = new InputFilter();
